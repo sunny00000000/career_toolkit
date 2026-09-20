@@ -1,0 +1,27 @@
+# Install: sudo cp career-toolkit.service /etc/systemd/system/
+# Then:    sudo systemctl daemon-reload
+#          sudo systemctl enable --now career-toolkit
+#
+# Before installing, edit the two paths below (WorkingDirectory, ExecStart,
+# EnvironmentFile) to match where you actually put this project, and swap
+# `youruser` for the Linux user that should own the process (not root).
+
+[Unit]
+Description=Career Toolkit (interview prep + resume builder)
+After=network.target
+
+[Service]
+Type=simple
+User=youruser
+WorkingDirectory=/home/youruser/career-toolkit
+EnvironmentFile=/home/youruser/career-toolkit/.env
+ExecStart=/home/youruser/career-toolkit/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000
+Restart=on-failure
+RestartSec=3
+
+# Basic hardening -- safe defaults for a single-purpose service like this.
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

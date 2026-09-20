@@ -1,0 +1,4 @@
+[lint]
+# Keep this to real-bug detectors (pyflakes) plus syntax errors, not style
+# opinions -- the goal is a safety net, not a style fight on day one.
+select = ["E9", "F"]
