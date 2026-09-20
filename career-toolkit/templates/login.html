@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Toolkit &mdash; Sign in</title>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="login-body">
+  <main class="login-card">
+    <h1 class="login-title">Career Toolkit</h1>
+    <p class="login-sub">Enter the password to continue.</p>
+    <form id="login-form" autocomplete="off">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required autofocus>
+      <p id="login-error" class="error-text" hidden>Incorrect password. Try again.</p>
+      <button type="submit">Sign in</button>
+    </form>
+  </main>
+
+  <script>
+    const form = document.getElementById('login-form');
+    const errorEl = document.getElementById('login-error');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorEl.hidden = true;
+      const password = document.getElementById('password').value;
+      try {
+        const res = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password }),
+        });
+        if (res.ok) {
+          window.location.href = '/';
+        } else if (res.status === 429) {
+          errorEl.textContent = 'Too many attempts \u2014 wait a few minutes and try again.';
+          errorEl.hidden = false;
+        } else {
+          errorEl.textContent = 'Incorrect password. Try again.';
+          errorEl.hidden = false;
+        }
+      } catch (err) {
+        errorEl.textContent = 'Could not reach the server. Try again.';
+        errorEl.hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

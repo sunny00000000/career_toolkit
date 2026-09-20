@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Toolkit</title>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">CT</span>
+      <span class="brand-name">Career Toolkit</span>
+    </div>
+
+    <nav class="mode-nav" aria-label="Workspace">
+      <button class="mode-btn is-active" data-mode="interview" type="button">
+        <span class="mode-dot"></span> Interview prep
+      </button>
+      <button class="mode-btn" data-mode="resume" type="button">
+        <span class="mode-dot"></span> Resume builder
+      </button>
+      <button class="mode-btn" data-mode="tracker" type="button">
+        <span class="mode-dot"></span> Tracker
+      </button>
+    </nav>
+
+    <div class="sidebar-section">
+      <h2 class="sidebar-heading">Recent</h2>
+      <ul class="recent-list" id="recent-list">
+        {% for item in recent %}
+        <li>
+          <button class="recent-item" type="button" data-id="{{ item.id }}" data-kind="{{ item.kind }}">
+            <span class="recent-role">{{ item.role }}</span>
+            <span class="recent-company">{{ item.company }}</span>
+          </button>
+        </li>
+        {% else %}
+        <li class="recent-empty">Nothing yet &mdash; your generations will show up here.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <button class="logout-btn" id="logout-btn" type="button">Sign out</button>
+  </aside>
+
+  <main class="workspace">
+
+    <section class="panel" id="panel-interview">
+      <header class="panel-header">
+        <h1>Interview prep</h1>
+        <p>Paste the role, company, and job description. You'll get role-standard questions, questions styled to this company, and scenario-based questions grounded in the actual responsibilities.</p>
+      </header>
+
+      <form id="interview-form" class="job-form">
+        <div class="field-row">
+          <div class="field">
+            <label for="int-role">Job role</label>
+            <input id="int-role" name="role" type="text" placeholder="e.g. DevOps Engineer" required>
+          </div>
+          <div class="field">
+            <label for="int-company">Company</label>
+            <input id="int-company" name="company" type="text" placeholder="e.g. Acme Corp" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="int-jd">Job description</label>
+          <textarea id="int-jd" name="job_description" rows="8" placeholder="Paste the full job description here" required></textarea>
+        </div>
+        <button type="submit" class="primary-btn">Generate questions</button>
+      </form>
+
+      <div class="results" id="interview-results" hidden></div>
+    </section>
+
+    <section class="panel" id="panel-resume" hidden>
+      <header class="panel-header">
+        <h1>Resume builder</h1>
+        <p>Paste your real background below &mdash; work history, skills, education, achievements. The AI tailors and formats it for this job; it won't invent experience you didn't give it.</p>
+      </header>
+
+      <form id="resume-form" class="job-form">
+        <div class="field-row">
+          <div class="field">
+            <label for="res-role">Target job role</label>
+            <input id="res-role" name="role" type="text" placeholder="e.g. DevOps Engineer" required>
+          </div>
+          <div class="field">
+            <label for="res-company">Target company</label>
+            <input id="res-company" name="company" type="text" placeholder="e.g. Acme Corp" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="res-jd">Target job description</label>
+          <textarea id="res-jd" name="job_description" rows="6" placeholder="Paste the job description you're applying to" required></textarea>
+        </div>
+        <div class="field">
+          <label for="res-upload">Upload your resume (optional)</label>
+          <input type="file" id="res-upload" accept=".pdf,.docx">
+          <p class="field-hint" id="upload-status">PDF or DOCX &mdash; fills in the box below so you can review or edit before generating.</p>
+        </div>
+        <div class="field">
+          <label for="res-background">Your background</label>
+          <textarea id="res-background" name="background" rows="10" placeholder="Paste your current resume, or list your work history, skills, and education" required></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="primary-btn">Build resume</button>
+          <button type="button" class="secondary-btn" id="cover-letter-btn">Write cover letter</button>
+        </div>
+      </form>
+
+      <div class="results" id="resume-results" hidden></div>
+      <div class="results" id="cover-letter-results" hidden></div>
+    </section>
+
+    <section class="panel" id="panel-tracker" hidden>
+      <header class="panel-header">
+        <h1>Tracker</h1>
+        <p>Jobs you've saved from a match search. Move a card as things progress, or jot a quick note on it.</p>
+      </header>
+      <div class="tracker-board" id="tracker-board"></div>
+    </section>
+
+  </main>
+</div>
+
+<div class="loading-overlay" id="loading-overlay" hidden>
+  <div class="loading-card">
+    <div class="loading-spinner" aria-hidden="true"></div>
+    <p id="loading-text">Working on it&hellip;</p>
+  </div>
+</div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
